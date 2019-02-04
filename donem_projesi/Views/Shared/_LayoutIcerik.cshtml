@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "_LayoutIcerik";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title> </title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <style type="text/css">
+        body{
+            background:url(../../2.gif) no-repeat center fixed;
+            background-size:cover;
+        }
+    </style>
+</head>
+
+<body style="width:1100px; height:auto; margin-left:100px; margin-right:100px;">
+
+    <img src="~/13.jpg" style="height: 150px; width: 550px; float:left;" />
+    <img src="~/DuyuruIcon.jpg" style="height: 150px; width: 550px; float:left;" />
+
+        <div id="Baslik" style="width: 1100px; float: left;">
+            @RenderSection("Baslik")
+        </div>
+
+        <div id="OrtaKisim" style="width: 1100px; height: 250px; float: left">
+            @RenderSection("OrtaKisim")
+
+        </div>
+
+        <div id="SonKisim" style="width: 1100px; height: auto; float: left">
+            @RenderSection("SonKisim")
+        </div>
+
+        <div style="clear:both;"></div>
+
+        <div style="width:1100px; height:25px; background-color:brown; float:left; color:white;">
+            Tüm Hakları Saklıdır. | Adres : Kocaeli
+        </div>
+
+</body>
+</html>
+
+@*<input type="button" value="Create" onclick="location.href='@Url.Action("AnaSayfa", "Site")'" />*@

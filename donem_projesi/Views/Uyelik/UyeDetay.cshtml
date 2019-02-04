@@ -1,0 +1,204 @@
+﻿@model IEnumerable<donem_projesi.Models.IsYeri>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>UyeDetay</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkP6y_11FmA1mcmoCpTlEeu35K0f7dwCs"></script>
+
+    <style type="text/css">
+        body {
+            background: url(../../2.gif) no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .navbar {
+            position: relative;
+            z-index: 1000;
+            min-height: 30px;
+            margin-bottom: 15px;
+            border: 1px solid transparent;
+        }
+    </style>
+
+    <style>
+        #Harita {
+            width: 450px;
+            height: 400px;
+        }
+    </style>
+
+    <script>
+
+        function initialize() {
+            var myLatlng = new google.maps.LatLng(@ViewBag.koordinat);
+            var mapOptions = {
+                zoom: 16,
+                center: myLatlng
+            }
+            var map = new google.maps.Map(document.getElementById("Harita"), mapOptions);
+
+            // To add the marker to the map, use the 'map' property
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: "Hello World!"
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+
+</head>
+<body style="width:1100px; height:auto; margin-left:100px; margin-right:100px;">
+
+    <img src="~/13.jpg" style="height: 150px; width: 550px; float:left;" />
+    <img src="~/DuyuruIcon.jpg" style="height: 150px; width: 550px;" />
+
+    <div class="navbar navbar-inverse" style=" background-color:#524d4d">
+
+        <ul class="nav navbar-nav">
+            <li>@Html.ActionLink("Ana Sayfa", "UyeSayfasi", "Uyelik", new { id = ViewBag.kullaniciId }, "")</li>
+        </ul>
+
+        <div style="height:50px; width:375px; margin-left:500px; float:left;">
+            <div style="color:#aad8f5; height:20px; font-size:medium;">@Html.Label("label1", "Sisteme Giriş Yaptınız")</div>
+            <div style="font-size:medium; margin-top:5px; float:left; color:#e1d5cd">@Html.Label("label1", "Kullanıcı Adı :")</div>
+            <div style="color:#f57316; margin-top:5px; margin-left:5px; font-size:medium; float:left;">@ViewBag.kullaniciAdi</div>
+        </div>
+
+        <div style="float:right;">
+            <ul class="nav navbar-nav ">
+                <li>@Html.ActionLink("Güvenli Çıkış", "AnaSayfa", "Site")</li>
+            </ul>
+        </div>
+
+
+    </div>
+
+    <div style="font-size:larger; color:#000000; margin-left:25px; margin-top:25px; float:left;">ARAMA SONUÇLARI</div><hr />
+    <div style="float:right; margin-top:25px; font-size:medium; ">@Html.ActionLink("Bu kategoriye ait yeni bir işyeri ekleme isteğinde bulunmak için tıklayın", "Isyeri_Ekle", "Uyelik", new { kategoriAdi = ViewBag.Sinif, il = ViewBag.Il, ilce = ViewBag.Ilce, kullaniciAdi = ViewBag.kullaniciAdi }, "")</div>
+
+    <div style="clear:both;"></div>
+    <div style="background-color:red; margin-left:50px; margin-top:30px; width:1000px; height:auto; color:#827676; font-size:medium;">
+        <div style="float:left; color:#8112b1;">***  @ViewBag.Il </div> <div style="float:left; margin-left:5px;">ilinin</div> <div style="float:left; margin-left:5px; color:#8112b1;">@ViewBag.Ilce</div> <div style="float:left; margin-left:5px;">ilçesinin</div>  <div style="float:left; margin-left:5px; color:#8112b1;">@ViewBag.Sinif</div> <div style="float:left; margin-left:5px;">kategorisi altındaki iş yerlerini görüntülemektesiniz...</div>
+    </div>
+
+
+    <table class="table" style="margin-top:75px;">
+        <tr>
+            <th style="color:#24702a">
+                @Html.DisplayNameFor(model => model.Kategori.Ad)
+            </th>
+            <th style="color:#24702a">
+                @Html.DisplayNameFor(model => model.Ad)
+            </th>
+            <th style="color:#24702a">
+                @Html.DisplayNameFor(model => model.Tel)
+            </th>
+            <th style="color:#24702a">
+                @Html.DisplayNameFor(model => model.Adres)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="color:#484242;">
+                    @Html.DisplayFor(modelItem => item.Kategori.Ad)
+                </td>
+                <td style="color:#484242;">
+                    @Html.DisplayFor(modelItem => item.Ad)
+                </td>
+                <td style="color:#484242;">
+                    @Html.DisplayFor(modelItem => item.Tel)
+                </td>
+                <td style="color:#484242;">
+                    @Html.DisplayFor(modelItem => item.Adres)
+                </td>
+                <td>
+                    <div style="margin-left:20px; float:left;">
+                        @Html.ActionLink("Yorumları ve Haritadaki Yerini Göster", "Yorum_Harita", "Uyelik", new { isyeri_id = item.Id, kullaniciAdi = ViewBag.kullaniciAdi }, "")
+                    </div>
+                </td>
+
+            </tr>
+        }
+
+    </table>
+
+    <br /><hr />
+
+    @if (ViewBag.yorum_harita_goster == 1)
+    {
+
+        <div id="YorumKismi" style="margin-top:5px; width:600px; height:auto; float:left;">
+            <h3 style="color:#ba0a0a">İş Yeri Bilgileri</h3><br />
+
+            <div>
+                <dl class="dl-horizontal">
+                    <dt style="color:#24702a">Kategori Adı</dt>
+                    <dd>@ViewBag.KategoriAdi</dd>
+                    <dt style="color:#24702a; margin-top:10px;">İsim</dt>
+                    <dd style="margin-top:10px;">@ViewBag.isim</dd>
+                    <dt style="color:#24702a; margin-top:10px;">Telefon</dt>
+                    <dd style="margin-top:10px;">@ViewBag.Telefon</dd>
+                    <dt style="color:#24702a; margin-top:10px;">Adres</dt>
+                    <dd style="margin-top:10px;">@ViewBag.Adres</dd>
+                </dl>
+            </div>
+
+            <h3 style="color:#ba0a0a">Yorumlar</h3>
+            <br />
+
+            @if (ViewBag.yorumlar.Count == 0)
+            {
+                <h4 style="color:#484242; margin-left:20px;">Henüz bu işyeri hakkında bir yorum bulunmamaktadır.</h4>
+                <h4 style="color:#484242;"> İlk yorumu siz yapın...</h4>
+            }
+
+            @foreach (var item in ViewBag.yorumlar) //Kullanıcı Adı ve altında yorumu...
+            {
+                try
+                {
+                    <div class="navbar" style=" background-color:#ff7d00; width:600px; height:20px;">
+                        <div style="color:darkblue; font-size:large; float:left; margin-left:10px;">@item.KullaniciAdi<br /></div>
+                        <div style="float:right; margin-right:10px;">@item.yorum_tarihi</div><br />
+                    </div>
+
+                    <div style="color:brown; font-size:medium; margin-left:10px;">@item.Yorum<br /><br /></div>
+                }
+                catch
+                {
+
+                }
+            }
+
+            <div style="height:200px;">
+                @using (Html.BeginForm())
+                {
+                    @Html.Label("label_Yorum", "Yorum Yaz")<br />
+                    @Html.TextArea("text_area", "", 5, 25, "")<br />
+                    <input type="submit" value="Yorum Gönder" />
+                }
+            </div>
+        </div>
+
+        <div style="color:#ba0a0a; margin-top:10px; float:right; margin-right:220px;"><h3>Harita Üzerindeki Yeri</h3><br /></div>
+        <div id="Harita" style="float:right; margin-top:15px;">
+        </div>
+
+    }
+    @Html.Raw(ViewBag.alert)
+</body>
+</html>

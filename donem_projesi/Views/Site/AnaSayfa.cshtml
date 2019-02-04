@@ -1,0 +1,182 @@
+﻿@model IEnumerable<donem_projesi.Models.Kategori>
+
+@{
+    ViewBag.Title = "AnaSayfa";
+    Layout = "~/Views/Shared/_LayoutIcerik.cshtml";
+}
+
+@section Baslik{
+
+    <div class="navbar navbar-inverse" style=" background-color:#524d4d">
+        <ul class="nav navbar-nav navbar-left">
+            <li>@Html.ActionLink("Ana Sayfa", "AnaSayfa", "Site")</li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink("Üye Ol", "UyeOl", "Uyelik")</li>
+            <li>@Html.ActionLink("Üye Girişi", "UyeGiris", "Uyelik")</li>
+        </ul>
+
+    </div>
+
+}
+
+@section OrtaKisim {
+
+    <div id="OrtaKisim_Sol" style="width: 700px; height: 250px; float: left;">
+        <ul>
+            <li style="color:#6c0303"><h4 style="margin-left:10px;">İkamet etmekte olduğunuz ilçede bulunan veya ziyaret etmeyi düşündüğünüz</h4> <h4> herhangi bir ilçedeki genellikle küçük esnaf olarak bilinen kişilere ve işyerlerine</h4> <h4>ait detaylı bilgilere sayfamızdan ulaşabilirsiniz.</h4> </li>
+            <li style="color:#6c0303; margin-top:30px;"><h4 style="margin-left:10px;">Bu kapsamdaki kişiler ve işyerleri hakkında diğer kullanıcıların yapmış</h4> <h4> oldukları yorumları görebilir, isterseniz siz de yorum yapabilirsiniz.</h4></li>
+        </ul>
+
+    </div>
+
+    <div id="OrtaKisim_Sag" style="width: 400px; height: 250px; float: left;">
+        <ul>
+            <li><p>Aramak istediğiniz işyerinin hangi il ve ilçede olduğunu buradan seçiniz.</p></li>
+        </ul>
+
+        @using (Html.BeginForm())
+        {
+            <div class="form-horizontal">
+
+                <div class="form-group">
+                    @Html.Label("lbl1", "İl", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("Kategori_Il", (List<SelectListItem>)ViewBag.ilKategori, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("lbl2", "İlçe", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+
+                        @Html.DropDownList("Kategori_Ilce", (List<SelectListItem>)ViewBag.ilceKategori, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-4">
+                        <input type="submit" value="ARA" class="btn btn-default" />
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+
+}
+
+
+@section SonKisim{
+
+    @if (@Model.Count() == 0)
+    {
+        <div style="width:650px; margin-left:200px;">
+            <div style="float:left; font-size:large; color:#139824;">* * Aranan İl :</div>
+            <div style="float:left; font-size:large; margin-left:10px;">@ViewBag.Il</div>
+            <div style="float:left; font-size:large; margin-left:80px; color:#139824;">* * Aranan İlçe :</div>
+            <div style="float:left; font-size:large; margin-left:10px;">@ViewBag.Ilce</div>
+        </div>
+        <div style="width:800px; height:50px; margin-top:75px; margin-left:75px; color:#91769d"><h4>-> Belirtilen İl ve İlçeye ait herhangi bir işyeri bulunmamaktadır! </h4> </div>
+    }
+
+    else
+    {
+        <div id="SonKisim_Sol" style="width: 200px; height: 600px; float: left;">
+            <h3 style="margin-top:5px; margin-left:10px; color:#ba4141"><br />KATEGORİLER</h3>
+            <hr />
+            <ul>
+                @foreach (var item in Model)
+                {
+                    <li style="margin-top:35px; font-size:large; color:#742597">@item.Ad</li>
+                }
+
+            </ul>
+        </div>
+
+        <div id="SonKisim_Sag" style="width: 900px; height: auto; float: left;">
+            @using (Html.BeginForm())
+            {
+                <div style="width:675px; margin-left:200px;">
+                    <div style="float:left; font-size:medium; color:#139824; font-size:large;">* * Aranan İl : </div>
+                    <div style="float:left; font-size:medium; margin-left:10px; font-size:large;">@ViewBag.Il</div>
+                    <div style="float:left; font-size:medium; margin-left:80px; color:#139824; font-size:large;">* * Aranan İlçe : </div>
+                    <div style="float:left; font-size:medium; margin-left:10px; font-size:large;">@ViewBag.Ilce</div>
+                </div>
+                <div style="clear:both;"></div>
+                <div style="text-align:center; margin-top:40px; font-size:larger; color:#b49a0a">Resimlerden herhangi birinin üzerine tıklayarak o kategoriye ait iş yerlerine ulaşabilirsiniz</div>
+
+                <div style="height:600px; width:900px; margin-left:50px; margin-top:20px;">
+
+                    @foreach (var item in Model)
+                    {
+                        if (item.Ad == "Yiyecek & İçecek")
+                        {
+                            <a href="@Url.Action("Detay", "Site", new { id = item.Id, ViewBag.Il, ViewBag.Ilce})" title="Yiyecek & İçecek">
+                                <img src="~/Content/resimler/yiyecek_icecek.jpg" style=" width:200px; height:175px; margin-top:15px; margin-left:50px;" />
+                            </a>
+                        }
+                        if (item.Ad == "Özel")
+                        {
+                            <a href="@Url.Action("Detay", "Site", new { id = item.Id, ViewBag.Il, ViewBag.Ilce})" title="Özel">
+                                <img src="~/Content/resimler/ozel.jpg" style="width:200px; height:175px; margin-top:15px; margin-left:50px;" />
+                            </a>
+                        }
+                        if (item.Ad == "Terzi")
+                        {
+                            <a href="@Url.Action("Detay", "Site", new { id = item.Id, ViewBag.Il, ViewBag.Ilce})" title="Terzi">
+                                <img src="~/Content/resimler/terzi.png" style="width:200px; height:175px; margin-top:15px; margin-left:50px;" />
+                            </a>
+                        }
+                        if (item.Ad == "Bisiklet Tamircisi")
+                        {
+                            <a href="@Url.Action("Detay", "Site", new { id = item.Id, ViewBag.Il, ViewBag.Ilce})" title="Bisiklet Tamircisi">
+                                <img src="~/Content/resimler/bisikletci.jpg" style="width:200px; height:175px; margin-top:15px; margin-left:50px;" />
+                            </a>
+                        }
+                        if (item.Ad == "Kırtasiye")
+                        {
+                            <a href="@Url.Action("Detay", "Site", new { id = item.Id, ViewBag.Il, ViewBag.Ilce})" title="Kırtasiye">
+                                <img src="~/Content/resimler/kirtasiye.jpg" style="width:200px; height:175px; margin-top:15px; margin-left:50px;" />
+                            </a>
+                        }
+                        if (item.Ad == "Berber")
+                        {
+                            <a href="@Url.Action("Detay", "Site", new { id = item.Id, ViewBag.Il, ViewBag.Ilce})" title="Berber">
+                                <img src="~/Content/resimler/berber.jpg" style="width:200px; height:175px; margin-top:15px; margin-left:50px;" />
+                            </a>
+                        }
+                        if (item.Ad == "Ayakkabi Tamircisi")
+                        {
+                            <a href="@Url.Action("Detay", "Site", new { id = item.Id, ViewBag.Il, ViewBag.Ilce})" title="Ayakkabı Tamircisi">
+                                <img src="~/Content/resimler/ayakkabici.jpg" style="width:200px; height:175px; margin-top:15px; margin-left:50px;" />
+                            </a>
+                        }
+                        if (item.Ad == "Araba & Halı Yıkama")
+                        {
+                            <a href="@Url.Action("Detay", "Site", new { id = item.Id, ViewBag.Il, ViewBag.Ilce})" title="Araba & Halı Yıkama">
+                                <img src="~/Content/resimler/araba_yikama.png" style="width:200px; height:175px; margin-top:15px; margin-left:50px;" />
+                            </a>
+                        }
+                        if (item.Ad == "Elektronik Eşya Tamircisi")
+                        {
+                            <a href="@Url.Action("Detay", "Site", new { id = item.Id, ViewBag.Il, ViewBag.Ilce})" title="Elektronik Eşya Tamircisi">
+                                <img src="~/Content/resimler/elektronik_esya.jpg" style="width:200px; height:175px; margin-top:15px; margin-left:50px;" />
+                            </a>
+                        }
+                    }
+
+
+                </div>
+
+            }
+        </div>
+    }
+
+
+
+}
+
+
+

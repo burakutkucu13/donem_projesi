@@ -1,0 +1,82 @@
+﻿@model IEnumerable<donem_projesi.Models.UyeYorum>
+
+@{
+    Layout = "~/Views/Shared/_LayoutYonetici.cshtml";
+}
+
+@section OrtaKisim {
+
+    @if (@Model.Count() == 0)
+    {
+        <div style="margin-top:25px; margin-left:20px;">
+            <h4 style="color:#808080">Onaylanmayı Bekleyen Yorum Bulunmamaktadır...</h4>
+        </div>
+    }
+    else
+    {
+        <div>
+            <h3 style="color:#bdab47">Onay Bekleyen Yorumlar</h3>
+            <table class="table">
+                <tr>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.KullaniciAdi)
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.Yorum)
+                    </th>
+
+
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.KullaniciAdi)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Yorum)
+                        </td>
+
+
+                        <td>
+                            @Html.ActionLink("Detay", "Yorumlar", new { detay = item.Yorum_Id }) |
+                            @Html.ActionLink("Onayla", "Yorum_Onay", new { id = item.Id, isyeri_id = item.Yorum_Id }) |
+                            @Html.ActionLink("Kaldır", "Yorum_Kaldir", new { id = item.Id, isyeri_id = item.Yorum_Id })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+
+        <div style="margin-top:20px;">
+            @if (ViewBag.detay != null)
+            {
+                <h3 style="color:#b033e6; ">İş Yeri Bilgileri</h3><br />
+                <div>
+                    <dl class="dl-horizontal">
+                        <dt style="color:#24702a">İsim</dt>
+                        <dd>@ViewBag.isim</dd>
+                        <dt style="color:#24702a; margin-top:10px;">İl</dt>
+                        <dd style="margin-top:10px;">@ViewBag.il</dd>
+                        <dt style="color:#24702a; margin-top:10px;">İlçe</dt>
+                        <dd style="margin-top:10px;">@ViewBag.ilce</dd>
+                        <dt style="color:#24702a; margin-top:10px;">Kategori Adı</dt>
+                        <dd style="margin-top:10px;">@ViewBag.kategoriAdi</dd>
+                        <dt style="color:#24702a; margin-top:10px;">Telefon</dt>
+                        <dd style="margin-top:10px;">@ViewBag.telefon</dd>
+                        <dt style="color:#24702a; margin-top:10px;">Adres</dt>
+                        <dd style="margin-top:10px;">@ViewBag.adres</dd>
+
+                    </dl>
+                </div>
+            }
+        </div>
+    }
+
+}
